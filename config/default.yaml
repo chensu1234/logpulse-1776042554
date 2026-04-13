@@ -1,0 +1,82 @@
+# LogPulse Configuration
+# ========================
+# Default configuration for log monitoring
+
+# Monitoring settings
+monitor:
+  # How often to check the file for new content (milliseconds)
+  interval: 1000
+  
+  # Number of recent lines to show on startup
+  showInitialLines: 50
+  
+  # Enable file rotation detection
+  detectRotation: true
+
+# Anomaly detection settings
+detection:
+  # Threshold score (0-100) for marking something as an anomaly
+  # Higher = fewer anomalies detected
+  threshold: 70
+  
+  # Number of consecutive errors to trigger burst detection
+  errorBurstThreshold: 5
+  
+  # Size of the history window for context analysis
+  historySize: 100
+  
+  # Patterns to classify as errors
+  errorPatterns:
+    - 'error'
+    - 'fatal'
+    - 'critical'
+    - 'panic'
+    
+  # Patterns to classify as warnings  
+  warningPatterns:
+    - 'warn'
+    - 'warning'
+    
+  # Patterns to classify as info
+  infoPatterns:
+    - 'info'
+    - 'notice'
+
+# UI settings
+ui:
+  # Enable colored output
+  color: true
+  
+  # Max line length before truncation
+  maxLineLength: 200
+  
+  # Update frequency for stats dashboard (milliseconds)
+  statsUpdateInterval: 1000
+
+# Output settings
+output:
+  # Log file for anomaly events
+  anomalyLog: 'log/anomalies.log'
+  
+  # Enable JSON output mode
+  jsonFormat: false
+  
+  # Include line numbers in output
+  includeLineNumbers: true
+
+# Security patterns (for highlighting potential issues)
+security:
+  enabled: true
+  patterns:
+    - name: 'SQL Injection'
+      pattern: '(union|select|insert|update|delete|drop).*(from|into|where)'
+      score: 90
+    - name: 'Path Traversal'
+      pattern: '\.\.\/'
+      score: 85
+    - name: 'XSS'
+      pattern: '<script|javascript:'
+      score: 80
+    - name: 'Command Injection'
+      pattern: '\|\s*\w+|;\s*\w+'
+      score: 90

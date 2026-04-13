@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+/**
+ * LogPulse CLI Entry Point
+ * 
+ * Real-time log monitoring and anomaly detection tool
+ * Usage: logpulse [options] [log-file]
+ */
+
+'use strict';
+
+const { program } = require('commander');
+const path = require('path');
+const fs = require('fs');
+const LogPulse = require('../src/index.js');
+
+// Parse command line arguments
+program
+  .name('logpulse')
+  .description('🔍 Real-time log monitoring and anomaly detection')
+  .version('1.0.0')
+  .option('-f, --file <path>', 'Log file to monitor')
+  .option('-c, --config <path>', 'Configuration file path', 'config/default.yaml')
+  .option('-i, --interval <ms>', 'Check interval in milliseconds', '1000')
+  .option('-t, --threshold <n>', 'Anomaly threshold (0-100)', '70')
+  .option('-s, --stats', 'Show statistics only (no live tail)', false)
+  .option('-n, --lines <n>', 'Number of recent lines to show on start', '50')
+  .option('--json', 'Parse JSON-formatted logs', false)
+  .option('--no-color', 'Disable colored output')
+  .option('--debug', 'Enable debug mode')
+  .parse(process.argv);
+
+const opts = program.opts();
+
+// Validate log file
+let logFile = opts.file;
+if (!logFile && opts.stats) {
+  console.error('❌ Error: --file is required when using --stats mode');
+  process.exit(1);
+}
+
+if (!logFile) {
+  // Try to find a default log file
+  const defaultPaths = [
+    'access.log',
+    'error.log',
+    'app.log',
+    'server.log',
+    './log/app.log'
+  ];
+  
+  for (const p of defaultPaths) {
+    if (fs.existsSync(p)) {
+      logFile = p;
+      break;
+    }
+  }
+  
+  if (!logFile) {
+    console.error('❌ Error: No log file specified and no default found');
+    console.error('   Use -f/--file to specify a log file');
+    process.exit(1);
+  }
+}
+
+// Check if file exists
+if (!fs.existsSync(logFile)) {
+  console.error(`❌ Error: Log file not found: ${logFile}`);
+  process.exit(1);
+}
+
+// Load configuration
+let config = {};
+const configPath = path.resolve(opts.config);
+if (fs.existsSync(configPath)) {
+  try {
+    const yaml = require('yaml');
+    const configFile = fs.readFileSync(configPath, 'utf8');
+    config = yaml.parse(configFile);
+  } catch (err) {
+    console.error(`⚠️  Warning: Failed to load config: ${err.message}`);
+  }
+}
+
+// Initialize LogPulse
+const logpulse = new LogPulse({
+  logFile: path.resolve(logFile),
+  config,
+  interval: parseInt(opts.interval),
+  threshold: parseInt(opts.threshold),
+  showLines: parseInt(opts.lines),
+  parseJson: opts.json,
+  color: opts.color,
+  debug: opts.debug,
+  statsMode: opts.stats
+});
+
+// Start monitoring
+logpulse.start();
+
+// Handle graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n\n👋 Shutting down LogPulse...');
+  logpulse.stop();
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  logpulse.stop();
+  process.exit(0);
+});

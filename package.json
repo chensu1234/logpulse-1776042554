@@ -1,0 +1,34 @@
+{
+  "name": "logpulse",
+  "version": "1.0.0",
+  "description": "Real-time log monitoring and anomaly detection tool with beautiful terminal UI",
+  "main": "src/index.js",
+  "bin": {
+    "logpulse": "./bin/logpulse"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/*.test.js",
+    "lint": "eslint src/"
+  },
+  "keywords": [
+    "log",
+    "monitoring",
+    "anomaly-detection",
+    "terminal",
+    "cli",
+    "devops",
+    "sre"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "yaml": "^2.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

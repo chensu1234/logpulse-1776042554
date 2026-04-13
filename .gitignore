@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Generated files
+*.log
+log/*.log
+!.log/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+
+# Test coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
