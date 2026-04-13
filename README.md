@@ -5,6 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/logpulse.svg)](https://npmjs.org/package/logpulse)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![GitHub Stars](https://img.shields.io/github/stars/chensu1234/logpulse-1776042554)](https://github.com/chensu1234/logpulse-1776042554)
 
 LogPulse is a powerful CLI tool for monitoring log files in real-time. It combines beautiful terminal output with intelligent anomaly detection to help developers, DevOps engineers, and SREs identify issues before they become problems.
 
@@ -206,7 +207,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ## 📝 CHANGELOG
 
-### [1.0.0](https://github.com/yourusername/logpulse) (2026-04-13)
+### [1.0.0](https://github.com/chensu1234/logpulse-1776042554) (2026-04-13)
 
 #### Added
 - Initial release
